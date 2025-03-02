@@ -265,7 +265,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"scannerDocumationAi/Preview Content\"";
-				DEVELOPMENT_TEAM = L7F6X2DV8Y;
+				DEVELOPMENT_TEAM = DTVA7UKM7F;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = scannerDocumationAi/App/Info.plist;
@@ -294,7 +294,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"scannerDocumationAi/Preview Content\"";
-				DEVELOPMENT_TEAM = L7F6X2DV8Y;
+				DEVELOPMENT_TEAM = DTVA7UKM7F;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = scannerDocumationAi/App/Info.plist;
