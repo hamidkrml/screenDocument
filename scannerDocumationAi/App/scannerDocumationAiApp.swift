@@ -11,7 +11,8 @@ import SwiftUI
 struct scannerDocumationAiApp: App {
     var body: some Scene {
         WindowGroup {
-            SplashScreen()
+            ContentView()
+                .modelContainer(for: Document.self)
         }
     }
 }
