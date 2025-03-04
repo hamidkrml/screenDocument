@@ -17,7 +17,10 @@ struct HomeView: View {
     @State private var isLoading: Bool = false
     @Query(sort: [.init(\Document.createdAt,order: .reverse)],animation: .snappy(duration: 0.25,extraBounce: 0)) private var documents: [Document]
     
-    ///envirmont  Values
+    /// document
+    @Namespace private var animationID
+    
+    ///envirmont  Value
     @Environment(\.modelContext) private var contex
     var body: some View {
       
@@ -26,7 +29,7 @@ struct HomeView: View {
             ScrollView(.vertical){
                 LazyVGrid(columns: Array(repeating: GridItem(spacing: 10), count: 2),spacing: 15) {
                     ForEach(documents) { document in
-                        
+                        DocumentCardView(document: document, animationID: animationID)
                     }
                 }
                 .padding(15)
@@ -43,16 +46,18 @@ struct HomeView: View {
             }didcancel: {
                 showscanerView = false
             } didfinsh: { scan in
-                print(scan.pageCount)
+                ScanerDocument = scan
                 showscanerView = false
                 askDocumentName = true
-            }.ignoresSafeArea()
+            }
+            .ignoresSafeArea()
         }
         .alert("DocumentKey", isPresented: $askDocumentName) {
             TextField("NewDocument",text: $documentName)
             Button("save"){
                 creAteButton()
-            }.disabled(documentName.isEmpty)
+            }
+            .disabled(documentName.isEmpty)
         }
         .loadingscreen(status: $isLoading)
     }
