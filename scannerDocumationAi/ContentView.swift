@@ -11,6 +11,7 @@ struct ContentView: View {
     @AppStorage("showInter") private var showInter: Bool = true
 
     var body: some View {
+        
         HomeView()
             .sheet(isPresented: $showInter) {
                 IntroView()
@@ -20,3 +21,6 @@ struct ContentView: View {
     }
 }
 
+//#Preview {
+////    ContentView(showInter: )
+//}

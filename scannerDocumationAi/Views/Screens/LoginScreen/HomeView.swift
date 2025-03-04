@@ -7,9 +7,14 @@
 
 import SwiftUI
 import SwiftData
+import VisionKit
 struct HomeView: View {
     @State private var showscanerView: Bool = false
     ///View properties
+    @State private var documentName: String = "NewDocument"
+    @State private var askDocumentName: Bool = false
+    @State private var ScanerDocument: VNDocumentCameraScan?
+    @State private var isLoading: Bool = false
     @Query(sort: [.init(\Document.createdAt,order: .reverse)],animation: .snappy(duration: 0.25,extraBounce: 0)) private var documents: [Document]
     var body: some View {
       
@@ -30,8 +35,23 @@ struct HomeView: View {
             }
         }
         .fullScreenCover(isPresented: $showscanerView){
-            
+            ScannerView{ error in 
+                
+            }didcancel: {
+                showscanerView = false
+            } didfinsh: { scan in
+                print(scan.pageCount)
+                showscanerView = false
+                askDocumentName = true
+            }.ignoresSafeArea()
         }
+        .alert("DocumentKey", isPresented: $askDocumentName) {
+            TextField("NewDocument",text: $documentName)
+            Button("save"){
+                creAteButton()
+            }.disabled(documentName.isEmpty)
+        }
+        .loadingscreen(status: $isLoading)
     }
     
     ///custom scaner button
@@ -68,6 +88,20 @@ struct HomeView: View {
             
         }
         .ignoresSafeArea()
+    }
+    
+    private func creAteButton(){
+        
+        guard let ScanerDocument else {return}
+        isLoading = true
+        Task.detached(priority: .high) {
+            let document = Document(name: documentName)
+            var pages: [documentPage] = []
+            for pageIndex in 0..<ScanerDocument.pageCount {
+                let pageImage = ScanerDocument.imageOfPage(at: pageIndex)
+                
+            }
+        }
     }
 }
 
