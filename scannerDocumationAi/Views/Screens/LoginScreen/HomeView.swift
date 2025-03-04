@@ -16,6 +16,9 @@ struct HomeView: View {
     @State private var ScanerDocument: VNDocumentCameraScan?
     @State private var isLoading: Bool = false
     @Query(sort: [.init(\Document.createdAt,order: .reverse)],animation: .snappy(duration: 0.25,extraBounce: 0)) private var documents: [Document]
+    
+    ///envirmont  Values
+    @Environment(\.modelContext) private var contex
     var body: some View {
       
         
@@ -94,12 +97,30 @@ struct HomeView: View {
         
         guard let ScanerDocument else {return}
         isLoading = true
-        Task.detached(priority: .high) {
+        Task.detached(priority: .high) { [documentName] in
+            ///swift 6 error------------------------->
+            
             let document = Document(name: documentName)
             var pages: [documentPage] = []
             for pageIndex in 0..<ScanerDocument.pageCount {
                 let pageImage = ScanerDocument.imageOfPage(at: pageIndex)
+                ///converting Image into data
+                ///Modifly the compreession as per your need
+                ///
                 
+                guard let pageData = pageImage.jpegData(compressionQuality: 0.65) else{return}
+                let documentPage = documentPage(document:document,pageIndex: pageIndex,pageData: pageData)
+                pages.append(documentPage)
+            }
+            document.pages = pages
+            await MainActor.run{
+                contex.insert(document)
+                try? contex.save()
+                
+                /// Resetting data
+                self.ScanerDocument = nil
+                isLoading = false
+                self.documentName = "New Document "
             }
         }
     }
